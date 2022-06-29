@@ -1,5 +1,7 @@
 return {
   opt = {
+    confirm = true,
+    gdefault = true,
     number = false,
     relativenumber = false,
     foldenable = true,
@@ -9,7 +11,7 @@ return {
     splitbelow = true,
     splitright = true,
     wildmode = "longest:full,full",
-    wrap = false,
+    wrap = true,
     linebreak = true,
   }
 }

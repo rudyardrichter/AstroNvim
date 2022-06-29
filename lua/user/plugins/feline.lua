@@ -66,6 +66,7 @@ return function(config)
       { provider = "diagnostic_info", hl = hl.fg("DiagnosticInfo"), icon = "  " },
       { provider = "diagnostic_hints", hl = hl.fg("DiagnosticHint"), icon = "  " },
     },
+    {},
     {
       { provider = { name = "file_type", opts = { filetype_icon = true, case = "lowercase" } }, hl = { fg = C.light4 }, enabled = conditional.has_filetype },
       { provider = provider.spacer(1), enabled = conditional.has_filetype },

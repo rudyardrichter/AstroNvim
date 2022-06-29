@@ -37,7 +37,6 @@ return {
     -- },
   },
 
-  -- Set colorscheme
   colorscheme = "gruvbox",
 
   -- set vim options here (vim.<first_key>.<second_key> =  value)
@@ -47,51 +46,15 @@ return {
     },
   },
 
-  -- Default theme configuration
-  default_theme = {
-    diagnostics_style = { italic = true },
-    -- Modify the color table
-    -- colors = {
-    --   fg = "#abb2bf",
-    -- },
-    -- plugins = { -- enable or disable extra plugin highlighting
-    --   aerial = true,
-    --   beacon = false,
-    --   bufferline = true,
-    --   dashboard = true,
-    --   highlighturl = true,
-    --   hop = false,
-    --   indent_blankline = true,
-    --   lightspeed = false,
-    --   ["neo-tree"] = true,
-    --   notify = true,
-    --   ["nvim-tree"] = false,
-    --   ["nvim-web-devicons"] = true,
-    --   rainbow = true,
-    --   symbols_outline = false,
-    --   telescope = true,
-    --   vimwiki = false,
-    --   ["which-key"] = true,
-    -- },
-  },
-
-  -- Disable AstroNvim ui features
-  -- ui = {
-  --   nui_input = true,
-  --   telescope_select = true,
-  -- },
-
   -- Configure plugins
   plugins = {
     -- Add plugins, the packer syntax without the "use"
     init = {
-      -- You can disable default plugins as follows:
-      -- ["goolord/alpha-nvim"] = { disable = true },
       ["akinsho/bufferline.nvim"] = { disable = true },
 
-      -- You can also add new plugins here as well:
       { "Vimjas/vim-python-pep8-indent", ft = "python" },
       { "ellisonleao/gruvbox.nvim" },
+      { "anuvyklack/pretty-fold.nvim" }
     },
     ["cmp"] = {
       sources = {
@@ -103,7 +66,6 @@ return {
         ["<C-k>"] = nil,
       },
     },
-    -- All other entries override the setup() call for default plugins
     ["null-ls"] = function(config)
       local null_ls = require "null-ls"
       config.sources = {
@@ -218,20 +180,28 @@ return {
     update_in_insert = true,
   },
 
-  -- This function is run last
-  -- good place to configure mappings and vim options
   polish = function()
-    -- Set autocommands
     vim.api.nvim_create_augroup("packer_conf", { clear = true })
-    -- vim.api.nvim_create_autocmd("BufWritePost", {
-    --   desc = "Sync packer after modifying plugins.lua",
-    --   group = "packer_conf",
-    --   pattern = "plugins.lua",
-    --   command = "source <afile> | PackerSync",
-    -- })
-    -- vim.fn.sign_define("DiagnosticSignError", { text = "❯ ", texthl = "DiagnosticSignError", numhl = '' })
-    -- vim.fn.sign_define("DiagnosticSignWarn", { text = "❯ ", texthl = "DiagnosticSignWarn", numhl = '' })
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      desc = "Sync packer after modifying plugins.lua",
+      group = "packer_conf",
+      pattern = "plugins.lua",
+      command = "source <afile> | PackerSync",
+    })
 
     vim.cmd("highlight IndentBlanklineContextChar guifg=" .. palette.dark4)
+    require('pretty-fold').setup{
+      add_close_pattern = true,
+      keep_indentation = true,
+      fill_char = '━',
+      sections = {
+        left = {
+          'content', '┣'
+        },
+        right = {
+          '┫ ', 'number_of_folded_lines', ': ', 'percentage', ' ┃ ',
+        }
+      }
+    }
   end,
 }
