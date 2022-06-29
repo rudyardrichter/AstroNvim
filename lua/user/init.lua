@@ -232,7 +232,6 @@ return {
     -- vim.fn.sign_define("DiagnosticSignError", { text = "❯ ", texthl = "DiagnosticSignError", numhl = '' })
     -- vim.fn.sign_define("DiagnosticSignWarn", { text = "❯ ", texthl = "DiagnosticSignWarn", numhl = '' })
 
-    vim.cmd("source ~/.config/nvim/lua/user/vimscript/folding.vim")
     vim.cmd("highlight IndentBlanklineContextChar guifg=" .. palette.dark4)
   end,
 }
