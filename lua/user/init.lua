@@ -54,7 +54,8 @@ return {
 
       { "Vimjas/vim-python-pep8-indent", ft = "python" },
       { "ellisonleao/gruvbox.nvim" },
-      { "anuvyklack/pretty-fold.nvim" }
+      { "anuvyklack/pretty-fold.nvim" },
+      { "tmhedberg/SimpylFold" },
     },
     ["cmp"] = {
       sources = {
@@ -67,6 +68,7 @@ return {
       },
     },
     ["null-ls"] = function(config)
+      ---@diagnostic disable-next-line: different-requires
       local null_ls = require "null-ls"
       config.sources = {
         -- Set a formatter

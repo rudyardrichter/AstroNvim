@@ -23,6 +23,8 @@ return {
     ["<C-k>"] = { "<C-y>", noremap = true },
     ["<C-l>"] = { "<C-i>", noremap = true },
 
+    ["<C-z>"] = {"&foldlevel ? 'zM' :'zR'", expr = true},
+
     ["<C-f>"] = {
       function()
         require("telescope.builtin").find_files()
@@ -31,6 +33,11 @@ return {
     ["<C-s>"] = {
       function()
         require("telescope.builtin").live_grep()
+      end,
+    },
+    ["<C-p>"] = {
+      function()
+        require("telescope.builtin").buffers()
       end,
     },
 
