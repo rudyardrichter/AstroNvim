@@ -5,6 +5,7 @@ return function(config)
   local conditional = require("core.status").conditional
   local vi_mode = require("feline.providers.vi_mode")
   local git_bg = C.dark2
+  config.disable = { filetypes = {} }
   config.theme = {
     fg = C.light4,
     bg = C.dark1,

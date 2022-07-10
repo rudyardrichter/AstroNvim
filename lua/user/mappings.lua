@@ -23,6 +23,8 @@ return {
     ["<C-k>"] = { "<C-y>", noremap = true },
     ["<C-l>"] = { "<C-i>", noremap = true },
 
+    ["<C-q>"] = { "<cmd>Telescope diagnostics bufnr=0<cr>" },
+
     ["<C-z>"] = {"&foldlevel ? 'zM' :'zR'", expr = true},
 
     ["<C-f>"] = {
@@ -33,6 +35,7 @@ return {
     ["<C-s>"] = {
       function()
         require("telescope.builtin").live_grep()
+        -- require("telescope.builtin").live_grep({["additional_args"] = "-i"})
       end,
     },
     ["<C-p>"] = {

@@ -54,27 +54,29 @@ return {
 
       { "Vimjas/vim-python-pep8-indent", ft = "python" },
       { "ellisonleao/gruvbox.nvim" },
-      { "anuvyklack/pretty-fold.nvim" },
+      { "rudyardrichter/pretty-fold.nvim" },
       { "tmhedberg/SimpylFold" },
-    },
-    ["cmp"] = {
-      sources = {
-        { name = 'nvim_lsp_signature_help' },
-      },
-      mapping = {
-        -- These don't work?
-        ["<C-j>"] = nil,
-        ["<C-k>"] = nil,
-      },
+      { "hrsh7th/cmp-nvim-lsp-signature-help" },
     },
     ["null-ls"] = function(config)
       ---@diagnostic disable-next-line: different-requires
       local null_ls = require "null-ls"
+      local h = require 'null-ls.helpers'
+      local blackd = {
+        name = 'blackd',
+        method = null_ls.methods.FORMATTING,
+        filetypes = { 'python' },
+        generator = h.formatter_factory {
+          command = 'blackd-client',
+          to_stdin = true,
+        },
+      }
+
       config.sources = {
-        -- Set a formatter
+        null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.rufo,
-        -- Set a linter
         null_ls.builtins.diagnostics.rubocop,
+        blackd,
       }
       -- set up null-ls's on_attach function
       config.on_attach = function(client)
@@ -90,7 +92,8 @@ return {
       return config -- return final config table
     end,
     aerial = {
-      link_folds_to_tree = true,
+      on_attach = function(bufnr)
+      end,
     },
     cinnamon = {
       default_delay = 2,
@@ -103,6 +106,20 @@ return {
     },
     packer = {
       compile_path = vim.fn.stdpath "config" .. "/lua/packer_compiled.lua",
+    },
+    telescope = {
+      defaults = {
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--trim" -- add this value
+        },
+      },
     },
   },
 
@@ -131,6 +148,14 @@ return {
       luasnip = 750,
       buffer = 500,
       path = 250,
+    },
+    sources = {
+      { name = 'nvim_lsp_signature_help' },
+    },
+    mapping = {
+      -- These don't work?
+      ["<C-j>"] = nil,
+      ["<C-k>"] = nil,
     },
   },
 
@@ -179,7 +204,7 @@ return {
   diagnostics = {
     virtual_text = { prefix = "❯" },
     underline = true,
-    update_in_insert = true,
+    update_in_insert = false,
   },
 
   polish = function()
@@ -194,14 +219,15 @@ return {
     vim.cmd("highlight IndentBlanklineContextChar guifg=" .. palette.dark4)
     require('pretty-fold').setup{
       add_close_pattern = true,
+      fill_char = '·',
+      fill_left = false,
       keep_indentation = true,
-      fill_char = '━',
       sections = {
         left = {
-          'content', '┣'
+          'content',
         },
         right = {
-          '┫ ', 'number_of_folded_lines', ': ', 'percentage', ' ┃ ',
+          '┃ ', 'number_of_folded_lines', ': ', 'percentage', ' ┃ ',
         }
       }
     }
