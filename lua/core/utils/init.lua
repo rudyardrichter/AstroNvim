@@ -8,6 +8,10 @@ astronvim.install.config = stdpath("config"):gsub("nvim$", "astronvim")
 vim.opt.rtp:append(astronvim.install.config)
 local supported_configs = { astronvim.install.home, astronvim.install.config }
 
+function astronvim.notify(msg, type, opts)
+  vim.notify(msg, type, vim.tbl_deep_extend("force", { title = "AstroNvim" }, opts or {}))
+end
+
 local function load_module_file(module)
   local found_module = nil
   for _, config_path in ipairs(supported_configs) do
@@ -49,10 +53,6 @@ function astronvim.conditional_func(func, condition, ...)
 end
 
 function astronvim.trim_or_nil(str) return type(str) == "string" and vim.trim(str) or nil end
-
-function astronvim.notify(msg, type, opts)
-  vim.notify(msg, type, vim.tbl_deep_extend("force", { title = "AstroNvim" }, opts or {}))
-end
 
 function astronvim.echo(messages)
   messages = messages or { { "\n" } }
