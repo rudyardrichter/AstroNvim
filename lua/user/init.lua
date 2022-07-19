@@ -98,6 +98,20 @@ return {
     cinnamon = {
       default_delay = 2,
     },
+    cmp = function(opts)
+      opts["source_priority"] = {
+        nvim_lsp = 1000,
+        luasnip = 750,
+        buffer = 500,
+        path = 250,
+      }
+      opts["sources"] = {
+        { name = 'nvim_lsp_signature_help' }
+      }
+      opts["mapping"]["<C-j>"] = nil
+      opts["mapping"]["<C-k>"] = nil
+      return opts
+    end,
     treesitter = {
       ensure_installed = { "lua" },
     },
@@ -139,23 +153,6 @@ return {
           -- ["N"] = { "<cmd>tabnew<cr>", "New Buffer" },
         },
       },
-    },
-  },
-
-  cmp = {
-    source_priority = {
-      nvim_lsp = 1000,
-      luasnip = 750,
-      buffer = 500,
-      path = 250,
-    },
-    sources = {
-      { name = 'nvim_lsp_signature_help' },
-    },
-    mapping = {
-      -- These don't work?
-      ["<C-j>"] = nil,
-      ["<C-k>"] = nil,
     },
   },
 
