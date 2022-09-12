@@ -13,6 +13,7 @@ return {
     splitbelow = true,
     splitright = true,
     wildmode = "longest:full,full",
+    wildignorecase = true,
     wrap = true,
     linebreak = true,
     undofile = true,

@@ -11,20 +11,21 @@ return function(config)
     bg = C.dark1,
   }
   config.vi_mode_colors = {
-      -- NORMAL = ,
-      -- OP = ,
-      -- INSERT = ,
-      -- VISUAL = ,
-      -- BLOCK = ,
-      -- REPLACE = ,
-      -- ["V-REPLACE"] = ,
-      -- ENTER = ,
-      -- MORE = ,
-      -- SELECT = ,
-      -- COMMAND = ,
-      -- SHELL = ,
-      -- TERM = ,
-      -- NONE = ,
+      NORMAL = C.bright_blue,
+      OP = C.bright_blue,
+      INSERT = C.bright_yellow,
+      VISUAL = C.bright_purple,
+      LINES = C.bright_purple,
+      BLOCK = C.bright_purple,
+      REPLACE = C.bright_red,
+      ["V-REPLACE"] = nil,
+      ENTER = nil,
+      MORE = nil,
+      SELECT = nil,
+      COMMAND = C.bright_green,
+      SHELL = nil,
+      TERM = nil,
+      NONE = nil,
   }
   local components = {
     {
@@ -34,6 +35,8 @@ return function(config)
         end,
         hl = function()
           local mode = hl.mode()()
+          -- mode["bg"] = config.vi_mode_colors[mode]
+          mode["bg"] = vi_mode.get_mode_color()
           mode["style"] = "bold"
           return mode
         end,
@@ -82,6 +85,7 @@ return function(config)
         provider = "scroll_bar",
         hl = function()
           local mode = hl.mode()()
+          mode["bg"] = vi_mode.get_mode_color()
           return { fg = mode.bg, bg = mode.fg }
         end,
       },

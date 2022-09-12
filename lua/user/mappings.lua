@@ -59,6 +59,8 @@ return {
     ["<C-j>"] = { "<C-c><cmd>w<cr>", noremap = true }
   },
   c = {
+    ["H"] = { "^", noremap = true },
+    ["L"] = { "$", noremap = true },
     ["<C-l>"] = {'wildmenumode() ? "\\<Down>" : "\\<C-l>"', expr = true, noremap = true},
   },
   v = {

@@ -1,64 +1,3 @@
-local find_cmd = function(cmd, prefixes, start_from, stop_at)
-  local path = require("lspconfig/util").path
-
-  if type(prefixes) == "string" then
-    prefixes = { prefixes }
-  end
-
-  local found
-  for _, prefix in ipairs(prefixes) do
-    local full_cmd = prefix and path.join(prefix, cmd) or cmd
-    local possibility
-
-    -- if start_from is a dir, test it first since transverse will start from its parent
-    if start_from and path.is_dir(start_from) then
-      possibility = path.join(start_from, full_cmd)
-      if vim.fn.executable(possibility) > 0 then
-        found = possibility
-        break
-      end
-    end
-
-    path.traverse_parents(start_from, function(dir)
-      possibility = path.join(dir, full_cmd)
-      if vim.fn.executable(possibility) > 0 then
-        found = possibility
-        return true
-      end
-      -- use cwd as a stopping point to avoid scanning the entire file system
-      if stop_at and dir == stop_at then
-        return true
-      end
-    end)
-
-    if found ~= nil then
-      break
-    end
-  end
-  return found or cmd
-end
-
-local palette = require("gruvbox.palette")
-require("gruvbox").setup({
-  inverse = false,
-  overrides = {
-    GruvboxRedSign = { bg = palette.dark0 },
-    GruvboxGreenSign = { bg = palette.dark0 },
-    GruvboxYellowSign = { bg = palette.dark0 },
-    GruvboxBlueSign = { bg = palette.dark0 },
-    GruvboxPurpleSign = { bg = palette.dark0 },
-    GruvboxAquaSign = { bg = palette.dark0 },
-    GruvboxOrangeSign = { bg = palette.dark0 },
-    Folded = { bg = palette.dark0 },
-    Pmenu = { bg = palette.dark0 },
-    IncSearch = { fg = palette.dark1, bg = palette.bright_blue },
-    Search = { fg = palette.dark0, bg = palette.bright_yellow },
-    SignColumn = { bg = palette.dark0 },
-    String = { italic = false },
-  }
-})
-vim.cmd("colorscheme gruvbox")
-
 return {
   -- Configure AstroNvim updates
   updater = {
@@ -97,6 +36,14 @@ return {
       { "rudyardrichter/pretty-fold.nvim" },
       { "tmhedberg/SimpylFold" },
       { "hrsh7th/cmp-nvim-lsp-signature-help" },
+      { "lervag/vimtex" },
+      {
+        "pwntester/octo.nvim",
+        config = function()
+          require("octo").setup()
+        end,
+      },
+      { "mong8se/actually.nvim" },
     },
     ["null-ls"] = function(config)
       ---@diagnostic disable-next-line: different-requires
@@ -253,7 +200,6 @@ return {
       command = "source <afile> | PackerSync",
     })
 
-    vim.cmd("highlight IndentBlanklineContextChar guifg=" .. palette.dark4)
     require('pretty-fold').setup{
       add_close_pattern = true,
       fill_char = '·',
@@ -271,6 +217,46 @@ return {
     -- require("py_lsp").setup{}
     local nvim_lsp = require("lspconfig")
     local lsp_util = require("lspconfig/util")
+    local find_cmd = function(cmd, prefixes, start_from, stop_at)
+      local path = require("lspconfig/util").path
+
+      if type(prefixes) == "string" then
+        prefixes = { prefixes }
+      end
+
+      local found
+      for _, prefix in ipairs(prefixes) do
+        local full_cmd = prefix and path.join(prefix, cmd) or cmd
+        local possibility
+
+        -- if start_from is a dir, test it first since transverse will start from its parent
+        if start_from and path.is_dir(start_from) then
+          possibility = path.join(start_from, full_cmd)
+          if vim.fn.executable(possibility) > 0 then
+            found = possibility
+            break
+          end
+        end
+
+        path.traverse_parents(start_from, function(dir)
+          possibility = path.join(dir, full_cmd)
+          if vim.fn.executable(possibility) > 0 then
+            found = possibility
+            return true
+          end
+          -- use cwd as a stopping point to avoid scanning the entire file system
+          if stop_at and dir == stop_at then
+            return true
+          end
+        end)
+
+        if found ~= nil then
+          break
+        end
+      end
+      return found or cmd
+    end
+
     nvim_lsp.pyright.setup({
       before_init = function(_, config)
         local p
@@ -281,9 +267,33 @@ return {
         end
         config.settings.python.pythonPath = p
       end,
+      -- on_attach = require("completion").on_attach
       settings = {
         disableOrganizeImports = true,
       },
     })
+
+    local palette = require("gruvbox.palette")
+    require("gruvbox").setup({
+      inverse = false,
+      overrides = {
+        GruvboxRedSign = { bg = palette.dark0 },
+        GruvboxGreenSign = { bg = palette.dark0 },
+        GruvboxYellowSign = { bg = palette.dark0 },
+        GruvboxBlueSign = { bg = palette.dark0 },
+        GruvboxPurpleSign = { bg = palette.dark0 },
+        GruvboxAquaSign = { bg = palette.dark0 },
+        GruvboxOrangeSign = { bg = palette.dark0 },
+        Folded = { bg = palette.dark0 },
+        Pmenu = { bg = palette.dark0 },
+        IncSearch = { fg = palette.dark1, bg = palette.bright_blue },
+        Search = { fg = palette.dark0, bg = palette.bright_yellow },
+        SignColumn = { bg = palette.dark0 },
+        String = { italic = false },
+      }
+    })
+    vim.cmd("colorscheme gruvbox")
+
+    vim.cmd("highlight IndentBlanklineContextChar guifg=" .. palette.dark4)
   end,
 }
