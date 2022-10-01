@@ -77,8 +77,13 @@ function M.provider.lsp_client_names(expand_null_ls)
     local buf_client_names = {}
     for _, client in pairs(vim.lsp.buf_get_clients(0)) do
       if client.name == "null-ls" and expand_null_ls then
-        vim.list_extend(buf_client_names, astronvim.null_ls_sources(vim.bo.filetype, "FORMATTING"))
-        vim.list_extend(buf_client_names, astronvim.null_ls_sources(vim.bo.filetype, "DIAGNOSTICS"))
+        local null_ls_sources = {}
+        for _, type in ipairs { "FORMATTING", "DIAGNOSTICS" } do
+          for _, source in ipairs(astronvim.null_ls_sources(vim.bo.filetype, type)) do
+            null_ls_sources[source] = true
+          end
+        end
+        vim.list_extend(buf_client_names, vim.tbl_keys(null_ls_sources))
       else
         table.insert(buf_client_names, client.name)
       end
@@ -88,8 +93,8 @@ function M.provider.lsp_client_names(expand_null_ls)
 end
 
 function M.provider.treesitter_status()
-  local ts = vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
-  return (ts and next(ts)) and " 綠TS" or ""
+  local ts_avail, ts = pcall(require, "nvim-treesitter.parsers")
+  return (ts_avail and ts.has_parser()) and " 綠TS" or ""
 end
 
 function M.provider.spacer(n) return string.rep(" ", n or 1) end
