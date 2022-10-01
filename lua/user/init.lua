@@ -44,6 +44,13 @@ return {
         end,
       },
       { "mong8se/actually.nvim" },
+      {
+        "folke/trouble.nvim",
+        config = function()
+          require("trouble").setup{
+          }
+        end
+      },
     },
     ["null-ls"] = function(config)
       ---@diagnostic disable-next-line: different-requires

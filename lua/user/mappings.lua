@@ -23,7 +23,7 @@ return {
     ["<C-k>"] = { "<C-y>", noremap = true },
     ["<C-l>"] = { "<C-i>", noremap = true },
 
-    ["<C-q>"] = { "<cmd>Telescope diagnostics bufnr=0<cr>" },
+    ["<C-q>"] = { "<cmd>lua require('telescope.builtin').diagnostics({ bufnr=0 })<cr>" },
 
     ["<C-z>"] = {"&foldlevel ? 'zM' :'zR'", expr = true},
 
@@ -59,8 +59,6 @@ return {
     ["<C-j>"] = { "<C-c><cmd>w<cr>", noremap = true }
   },
   c = {
-    ["H"] = { "^", noremap = true },
-    ["L"] = { "$", noremap = true },
     ["<C-l>"] = {'wildmenumode() ? "\\<Down>" : "\\<C-l>"', expr = true, noremap = true},
   },
   v = {
